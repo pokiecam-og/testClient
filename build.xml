@@ -1,0 +1,43 @@
+<project name="testClient" default="wrapper">
+   <property file="build.properties" />
+   <taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
+   <target name="init" depends="clean">
+      <mkdir dir="${DEPLOY_DIR}" />
+   </target>
+   <target name="compile_swf" depends="init">
+      <mxmlc file="${SRC_DIR}/testClient.mxml" output="${DEPLOY_DIR}/testClient.swf">
+         <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
+         <source-path path-element="${FLEX_HOME}/frameworks"/>
+         <compiler.debug>false</compiler.debug>
+      </mxmlc>
+   </target>
+   <target name="wrapper" depends="compile_swf">
+<!-- Using a custom html wrapper
+	<copy file="${basedir}/html-template/index.template.html"
+			 tofile="${DEPLOY_DIR}/testClient.html" />
+	<replace file="${DEPLOY_DIR}/testClient.html" token="$${title}" value="testClient"/>
+	<replace file="${DEPLOY_DIR}/testClient.html" token="$${swf}" value="testClient"/>
+	<replace file="${DEPLOY_DIR}/testClient.html" token="$${width}" value="100%"/>
+	<replace file="${DEPLOY_DIR}/testClient.html" token="$${height}" value="100%"/>
+	<replace file="${DEPLOY_DIR}/testClient.html" token="$${bgcolor}" value="#000000"/>
+	<replace file="${DEPLOY_DIR}/testClient.html" token="$${application}" value="MyApp"/>
+	<replace file="${DEPLOY_DIR}/testClient.html" token="$${version_major}" value="9"/>
+	<replace file="${DEPLOY_DIR}/testClient.html" token="$${version_minor}" value="0"/>
+	<replace file="${DEPLOY_DIR}/testClient.html" token="$${version_revision}" value="28"/>
+-->
+        <html-wrapper
+            title="testClient"
+            file="testClient.html"
+            height="100%"
+            width="100%"
+            application="app"
+            swf="testClient"
+            history="true"
+            express-install="true"
+            version-detection="true"
+            output="${DEPLOY_DIR}"/>
+    </target>
+    <target name="clean">
+      <delete dir="${DEPLOY_DIR}" />
+    </target>
+</project>
